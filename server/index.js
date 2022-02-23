@@ -1,5 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const cors = require("cors");
 const UserRouter = require("./Router/UserRouter");
 const PostRouter = require("./Router/PostRouter");
 const connectDB = require("./Config/database");
