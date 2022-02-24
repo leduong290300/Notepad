@@ -3,8 +3,9 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useContext, useState, useEffect } from "react";
 import { PostContext } from "../../Context/PostContext";
-
+import { useTranslation } from "react-i18next";
 const UpdatePostModal = () => {
+  const { t } = useTranslation();
   // Contexts
   const {
     postState: { post },
@@ -33,7 +34,11 @@ const UpdatePostModal = () => {
     event.preventDefault();
     const { success, message } = await updatePost(updatedPost);
     setShowUpdatePostModal(false);
-    setShowToast({ show: true, message, type: success ? "success" : "danger" });
+    setShowToast({
+      show: true,
+      message: message ? `${t("update_skills")}` : "",
+      type: success ? "success" : "danger",
+    });
   };
 
   // const resetAddPostData = () => {
@@ -44,14 +49,14 @@ const UpdatePostModal = () => {
   return (
     <Modal show={showUpdatePostModal} onHide={closeDialog}>
       <Modal.Header closeButton>
-        <Modal.Title>Cập nhật</Modal.Title>
+        <Modal.Title>{t("update_title")}</Modal.Title>
       </Modal.Header>
       <Form onSubmit={onSubmit}>
         <Modal.Body>
           <Form.Group className="mb-3">
             <Form.Control
               type="text"
-              placeholder="Title"
+              placeholder={t("title")}
               name="title"
               required
               aria-describedby="title-help"
@@ -63,7 +68,7 @@ const UpdatePostModal = () => {
             <Form.Control
               as="textarea"
               rows={3}
-              placeholder="Description"
+              placeholder={t("description")}
               name="description"
               value={description}
               onChange={onChangeUpdatedPostForm}
@@ -72,7 +77,7 @@ const UpdatePostModal = () => {
           <Form.Group className="mb-3">
             <Form.Control
               type="text"
-              placeholder="Youtube Tutorial URL"
+              placeholder={t("url")}
               name="url"
               value={url}
               onChange={onChangeUpdatedPostForm}
@@ -85,18 +90,18 @@ const UpdatePostModal = () => {
               name="status"
               onChange={onChangeUpdatedPostForm}
             >
-              <option value="Bắt đầu học">Bắt đầu học</option>
-              <option value="Đang học">Đang học</option>
-              <option value="Đã học xong">Đã học xong</option>
+              <option value={t("to_learn")}>{t("to_learn")}</option>
+              <option value={t("learning")}>{t("learning")}</option>
+              <option value={t("learned")}>{t("learned")}</option>
             </Form.Control>
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeDialog}>
-            Hủy
+            {t("cancle")}
           </Button>
           <Button variant="primary" type="submit">
-            Cập nhật
+            {t("update_button")}
           </Button>
         </Modal.Footer>
       </Form>

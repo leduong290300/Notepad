@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../Context/AuthContext";
 import AlertMessage from "../../Components/AlertMessage/AlertMessage";
-
+import { useTranslation } from "react-i18next";
 const RegisterForm = () => {
   // Context
   const { registerUser } = useContext(AuthContext);
-
+  const { t } = useTranslation();
   // Local state
   const [registerForm, setRegisterForm] = useState({
     username: "",
@@ -29,8 +29,14 @@ const RegisterForm = () => {
   const register = async (event) => {
     event.preventDefault();
 
+    if (!username || !password) {
+      setAlert({ type: "danger", message: ` ${t("fail_user_password")}` });
+      setTimeout(() => setAlert(null), 5000);
+      return;
+    }
+
     if (password !== confirmPassword) {
-      setAlert({ type: "danger", message: "Mật khẩu không khớp" });
+      setAlert({ type: "danger", message: ` ${t("match_password")}` });
       setTimeout(() => setAlert(null), 5000);
       return;
     }
@@ -38,7 +44,10 @@ const RegisterForm = () => {
     try {
       const registerData = await registerUser(registerForm);
       if (!registerData.success) {
-        setAlert({ type: "danger", message: registerData.message });
+        setAlert({
+          type: "danger",
+          message: registerData.message ? `${t("register_fail_user")}` : "",
+        });
         setTimeout(() => setAlert(null), 5000);
       }
     } catch (error) {
@@ -54,7 +63,7 @@ const RegisterForm = () => {
         <Form.Group className="mb-3">
           <Form.Control
             type="text"
-            placeholder="Username"
+            placeholder={t("username")}
             name="username"
             required
             value={username}
@@ -64,7 +73,7 @@ const RegisterForm = () => {
         <Form.Group className="mb-3">
           <Form.Control
             type="password"
-            placeholder="Password"
+            placeholder={t("password")}
             name="password"
             required
             value={password}
@@ -74,7 +83,7 @@ const RegisterForm = () => {
         <Form.Group className="mb-3">
           <Form.Control
             type="password"
-            placeholder="Confirm Password"
+            placeholder={t("confirm_password")}
             name="confirmPassword"
             required
             value={confirmPassword}
@@ -82,14 +91,14 @@ const RegisterForm = () => {
           />
         </Form.Group>
         <Button variant="success" type="submit">
-          Đăng ký tài khoản
+          {t("register")}
         </Button>
       </Form>
       <p>
-        Đã có tài khoản
+        {t("have_a_account")}
         <Link to="/login">
           <Button variant="info" size="sm" className="ml-2">
-            Đăng nhập
+            {t("login")}
           </Button>
         </Link>
       </p>

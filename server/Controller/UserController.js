@@ -19,12 +19,6 @@ const verifyAuth = async (req, res) => {
 const handleLogin = async (req, res) => {
   const { username, password } = req.body;
 
-  // Simple validation
-  if (!username || !password)
-    return res
-      .status(400)
-      .json({ success: false, message: "Thiếu tên đăng nhập hoặc mật khẩu" });
-
   try {
     // Kiểm tra sự tồn tại của người dùng
     const user = await User.findOne({ username });
@@ -61,12 +55,6 @@ const handleLogin = async (req, res) => {
 
 const handleRegister = async (req, res) => {
   const { username, password } = req.body;
-
-  // Simple validation
-  if (!username || !password)
-    return res
-      .status(400)
-      .json({ success: false, message: "Thiếu tên đăng nhập hoặc mật khẩu" });
 
   try {
     // Check for existing user

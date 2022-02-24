@@ -3,18 +3,18 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useContext, useState } from "react";
 import { PostContext } from "../../Context/PostContext";
-
+import { useTranslation } from "react-i18next";
 const AddPostModal = () => {
   // Contexts
   const { showAddPostModal, setShowAddPostModal, addPost, setShowToast } =
     useContext(PostContext);
-
+  const { t } = useTranslation();
   // State
   const [newPost, setNewPost] = useState({
     title: "",
     description: "",
     url: "",
-    status: "Bắt đầu học",
+    status: `${t("to_learn")}`,
   });
 
   const { title, description, url } = newPost;
@@ -29,26 +29,35 @@ const AddPostModal = () => {
   const onSubmit = async (event) => {
     event.preventDefault();
     const { success, message } = await addPost(newPost);
+    setShowToast({
+      show: true,
+      message: message ? `${t("add_skills")}` : "",
+      type: success ? "success" : "danger",
+    });
     resetAddPostData();
-    setShowToast({ show: true, message, type: success ? "success" : "danger" });
   };
 
   const resetAddPostData = () => {
-    setNewPost({ title: "", description: "", url: "", status: "Bắt đầu học" });
+    setNewPost({
+      title: "",
+      description: "",
+      url: "",
+      status: `${t("to_learn")}`,
+    });
     setShowAddPostModal(false);
   };
 
   return (
     <Modal show={showAddPostModal} onHide={closeDialog}>
       <Modal.Header closeButton>
-        <Modal.Title>Bạn muốn học ?</Modal.Title>
+        <Modal.Title>{t("dont_title")}</Modal.Title>
       </Modal.Header>
       <Form onSubmit={onSubmit}>
         <Modal.Body>
           <Form.Group className="mb-3">
             <Form.Control
               type="text"
-              placeholder="Title"
+              placeholder={t("title")}
               name="title"
               required
               aria-describedby="title-help"
@@ -60,7 +69,7 @@ const AddPostModal = () => {
             <Form.Control
               as="textarea"
               rows={3}
-              placeholder="Description"
+              placeholder={t("description")}
               name="description"
               value={description}
               onChange={onChangeNewPostForm}
@@ -69,7 +78,7 @@ const AddPostModal = () => {
           <Form.Group className="mb-3">
             <Form.Control
               type="text"
-              placeholder="Youtube Tutorial URL"
+              placeholder={t("url")}
               name="url"
               value={url}
               onChange={onChangeNewPostForm}
@@ -78,10 +87,10 @@ const AddPostModal = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeDialog}>
-            Hủy
+            {t("cancle")}
           </Button>
           <Button variant="primary" type="submit">
-            Thêm
+            {t("add")}
           </Button>
         </Modal.Footer>
       </Form>
