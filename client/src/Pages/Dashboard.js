@@ -15,8 +15,10 @@ import SinglePost from "../Components/SinglePost/SinglePost";
 import AddPostModal from "../Components/Modal/AddPostModal";
 import UpdatePostModal from "../Components/Modal/UpdatePostModal";
 import addIcon from "../Assets/plus-circle-fill.svg";
+import { useTranslation } from "react-i18next";
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   // Contexts
   const {
     authState: {
@@ -47,15 +49,17 @@ const Dashboard = () => {
     body = (
       <>
         <Card className="text-center mx-5 my-5">
-          <Card.Header as="h1">Xin chào {username}</Card.Header>
+          <Card.Header as="h1">
+            {t("welcome")} {username}
+          </Card.Header>
           <Card.Body>
-            <Card.Title>Chào mứng đến với Notepad</Card.Title>
-            <Card.Text>Nhấn vào nút bên dưới để thêm kỹ năng cần học</Card.Text>
+            <Card.Title>{t("welcome_to")} Notepad</Card.Title>
+            <Card.Text>{t("create_slogan")}</Card.Text>
             <Button
               variant="primary"
               onClick={setShowAddPostModal.bind(this, true)}
             >
-              Thêm
+              {t("add")}
             </Button>
           </Card.Body>
         </Card>
@@ -75,7 +79,7 @@ const Dashboard = () => {
         {/* Open Add Post Modal */}
         <OverlayTrigger
           placement="left"
-          overlay={<Tooltip>Thêm những gì bạn muốn học</Tooltip>}
+          overlay={<Tooltip>{t("add_slogan")}</Tooltip>}
         >
           <Button
             className="btn-floating"

@@ -15,18 +15,12 @@ const getAllPosts = async (req, res) => {
 const createPost = async (req, res) => {
   const { title, description, url, status } = req.body;
 
-  // Simple validation
-  if (!title)
-    return res
-      .status(400)
-      .json({ success: false, message: "Tiêu đề không được để trống" });
-
   try {
     const newPost = new Post({
       title,
       description,
       url: url.startsWith("https://") ? url : `https://${url}`,
-      status: status || "Bắt đầu học",
+      status: status,
       user: req.userId,
     });
 
@@ -46,18 +40,12 @@ const createPost = async (req, res) => {
 const updatePost = async (req, res) => {
   const { title, description, url, status } = req.body;
 
-  // Simple validation
-  if (!title)
-    return res
-      .status(400)
-      .json({ success: false, message: "Tiêu đề không được để trống" });
-
   try {
     let updatedPost = {
       title,
       description: description || "",
       url: (url.startsWith("https://") ? url : `https://${url}`) || "",
-      status: status || "Bắt đầu học",
+      status: status,
     };
 
     const postUpdateCondition = { _id: req.params.id, user: req.userId };
@@ -82,7 +70,7 @@ const updatePost = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).json({ success: false, message: "Lỗi máy chủ" });
   }
 };
 

@@ -6,8 +6,9 @@ import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
 import { useContext } from "react";
-
+import { useTranslation } from "react-i18next";
 const NavbarMenu = () => {
+  const { t } = useTranslation();
   const {
     authState: {
       user: { username },
@@ -39,13 +40,13 @@ const NavbarMenu = () => {
             to="/dashboard"
             as={Link}
           >
-            Bảng điều khiển
+            {t("dashboard")}
           </Nav.Link>
         </Nav>
 
         <Nav>
           <Nav.Link className="font-weight-bolder text-white" disabled>
-            Xin chào {username}
+            {t("welcome")} {username}
           </Nav.Link>
           <Button
             variant="secondary"
@@ -59,7 +60,7 @@ const NavbarMenu = () => {
               height="32"
               className="mr-2"
             />
-            Đăng xuất
+            {t("logout")}
           </Button>
         </Nav>
       </Navbar.Collapse>

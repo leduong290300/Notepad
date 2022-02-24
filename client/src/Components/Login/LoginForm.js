@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 import { useState, useContext } from "react";
 import { AuthContext } from "../../Context/AuthContext";
 import AlertMessage from "../../Components/AlertMessage/AlertMessage";
-
+import { useTranslation } from "react-i18next";
 const LoginForm = () => {
   // Context
   const { loginUser } = useContext(AuthContext);
-
+  const { t } = useTranslation();
   // Local state
   const [loginForm, setLoginForm] = useState({
     username: "",
@@ -24,11 +24,22 @@ const LoginForm = () => {
 
   const login = async (event) => {
     event.preventDefault();
-
+    if (!username || !password) {
+      setAlert({
+        type: "danger",
+        message: ` ${t("login_fail_user_password")}`,
+      });
+      setTimeout(() => setAlert(null), 5000);
+      return;
+    }
     try {
       const loginData = await loginUser(loginForm);
       if (!loginData.success) {
-        setAlert({ type: "danger", message: loginData.message });
+        setAlert({
+          type: "danger",
+
+          message: loginData.message ? `${t("login_fail_user_password")}` : "",
+        });
         setTimeout(() => setAlert(null), 5000);
       }
     } catch (error) {
@@ -44,7 +55,7 @@ const LoginForm = () => {
         <Form.Group className="mb-3">
           <Form.Control
             type="text"
-            placeholder="Tên đăng nhập"
+            placeholder={t("username")}
             name="username"
             required
             value={username}
@@ -54,7 +65,7 @@ const LoginForm = () => {
         <Form.Group className="mb-3">
           <Form.Control
             type="password"
-            placeholder="Mật khẩu"
+            placeholder={t("password")}
             name="password"
             required
             value={password}
@@ -62,14 +73,14 @@ const LoginForm = () => {
           />
         </Form.Group>
         <Button variant="success" type="submit">
-          Đăng nhập
+          {t("login")}
         </Button>
       </Form>
       <p>
-        Chưa có tài khoản?
+        {t("dont_account")}
         <Link to="/register">
           <Button variant="info" size="sm" className="ml-2">
-            Đăng ký ngay
+            {t("register")}
           </Button>
         </Link>
       </p>

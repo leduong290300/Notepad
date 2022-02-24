@@ -14,7 +14,7 @@ const PostSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ["Bắt đầu học", "Đang học", "Đã học xong"],
+    // enum: ["Bắt đầu học", "Đang học", "Đã học xong"],
   },
   user: {
     type: Schema.Types.ObjectId,
