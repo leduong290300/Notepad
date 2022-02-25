@@ -7,17 +7,25 @@ const connectDB = require("./Config/database");
 dotenv.config();
 const app = express();
 app.use(express.json());
-app.use(function (req, res, next) {
+const allowCrossDomain = function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
   res.header(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept",
+    "Content-Type, Authorization, Content-Length, X-Requested-With",
   );
-  next();
-});
+
+  // intercept OPTIONS method
+  if ("OPTIONS" == req.method) {
+    res.send(200);
+  } else {
+    next();
+  }
+};
 
 connectDB();
 const PORT = process.env.PORT || 5000;
+app.use(allowCrossDomain);
 
 app.use("/api/user", UserRouter);
 app.use("/api/posts", PostRouter);
