@@ -6,10 +6,16 @@ const PostRouter = require("./Router/PostRouter");
 const connectDB = require("./Config/database");
 dotenv.config();
 const app = express();
+const PORT = process.env.PORT || 5000;
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", process.env.REACT_URL);
+  res.header("Access-Control-Allow-Credentials", true);
+  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With,content-type");
+  next();
+});
 
 connectDB();
-const PORT = process.env.PORT || 5000;
-app.use(cors());
 app.use(express.json());
 
 app.use("/api/user", UserRouter);
